@@ -1,15 +1,32 @@
-## Put comments here that give an overall description of what your
-## functions do
+## This script enables to cache results of intvering matrices, thus making
+## repititive matrices inversion more efficient.
 
-## Write a short comment describing this function
-
+## Caches a given matrix
 makeCacheMatrix <- function(x = matrix()) {
-
+        inv <- NULL
+        set <- function(y) {
+            x <<- y
+            inv <<- NULL
+        }
+        get <- function() x
+        setinverse <- function(inverse) inv <<- inverse
+        getinverse <- function() inv
+        list(set = set, get = get,
+             setinverse = setinverse,
+             getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
-
+## Perform a matrix inversion;  in case it was already done (and cached), fetching the
+## cached result.  Otherwise, performing the inversion and caching the result for next time.
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    inv <- x$getinverse()
+    if(!is.null(inv)) {
+        message("getting cached data")
+        return(inv)
+    }
+    data <- x$get()
+    inv <- solve(x, ...)
+    x$setinverse(inv)
+    inv
 }
